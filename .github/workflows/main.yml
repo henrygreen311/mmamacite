@@ -29,15 +29,10 @@ jobs:
           # Trap SIGTERM to exit cleanly if canceled
           trap "echo 'Job canceled, exiting successfully'; exit 0" SIGTERM
 
-          # Run NBMiner for up to 5h 30m (19800 seconds)
+          # Run NBMiner for up to 5h 30m (19800 seconds) using Ezil dual-mining endpoint
           timeout 19800s bash -c '
-            echo "Starting dual mining..."
+            echo "Starting ETC + ZIL dual mining via Ezil..."
             ./nbminer -a ethash \
-              -o stratum+tcp://etc.2miners.com:1010 \
-              -u 0xa4Adaf2547f79004A19464B6dfd29aDbf9B93698.rig01 \
-              --enable-dag-cache \
-              --dual-algo zil \
-              --dual-intensity 1 \
-              --dual-pool stratum+tcp://zil.flexpool.io:4444 \
-              --dual-user zil1ldrlejs7lruqxzk98zf0ndg0nu8z34pr7enu8r.rig01
+              -o stratum+tcp://eu.ezil.me:4444 \
+              -u 0xa4Adaf2547f79004A19464B6dfd29aDbf9B93698.zil1ldrlejs7lruqxzk98zf0ndg0nu8z34pr7enu8r
           ' && echo "Miner ran successfully for up to 5 hours 30 minutes." || { echo "Timeout or error occurred. Exiting gracefully."; exit 0; }
