@@ -13,7 +13,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y build-essential git cmake libssl-dev
+          sudo apt install -y build-essential git cmake libssl-dev libhwloc-dev
 
       - name: Clone XMRig
         run: git clone https://github.com/xmrig/xmrig.git
