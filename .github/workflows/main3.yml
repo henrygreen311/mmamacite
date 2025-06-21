@@ -2,7 +2,7 @@ name: Earner2
 
 on:
   schedule:
-    - cron: '0 */5 * * *'  # Every 5 hours
+    - cron: '0 */1 * * *'  # Every 1 hours
   workflow_dispatch:
 
 jobs:
